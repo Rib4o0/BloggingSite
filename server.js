@@ -21,7 +21,6 @@ app.get('/blog/:id', (req,res) => {
 })
 
 app.get('/get-blog-data/:id', (req,res) => {
-  console.log(req.params.id);
   const blogData = {id: req.params.id, title: 'title', content: 'content'};
   res.send(blogData);
 })

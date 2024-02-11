@@ -1,0 +1,218 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+* {
+    font-family: poppins;
+    font-size: 2vh;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    overflow-x: hidden;
+}
+
+::-webkit-scrollbar {
+    display: none;
+}
+
+.scrollbar {
+    width: 5px;
+    position: fixed;
+    right: 0;
+    top: 0;
+    height: 100vh;
+    background-color: #ddd;   
+}
+
+.progress {
+    width: 100%;
+    height: 0%;
+    background-color: red;
+    border-radius: 5px;
+    transition: all 250ms;
+}
+
+header {
+    position: fixed;
+    left: 0;
+    top:0;
+    padding-inline: 1.5vh;
+    width: calc(100% - 3vh);
+    height: 8vh;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: red;
+    z-index: 2;
+}
+
+.headerTitle {
+    font-size: 4.5vh;
+    font-weight: 900;
+    color:white;
+    width: 35vh;
+}
+
+.createBlog {
+    width: 20vh;
+    height: 5vh;
+    background-color: red;
+    border: 2px solid white;
+    border-radius: 0.5vh;
+    color: white;
+    font-weight: 700;
+    transition: all 250ms;
+    max-width: 40vw;
+}
+
+.login {
+    width: 15vh;
+    height: 5vh;
+    background-color: white;
+    border: 2px solid white;
+    border-radius: .5vh;
+    color:red;
+    font-weight: 700;
+    transition: all 250ms;
+    max-width: 23vw;
+}
+
+.createBlog:hover, .login:hover {
+    box-shadow: 0 0 1.5vh white;
+    cursor:pointer;
+}
+
+.navOptions {
+    width: 40vw;
+    color: white;
+    height: 8vh;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    font-weight: 500;
+    transition: all 250ms;
+}
+
+.navOptions > *:hover {
+    text-shadow: 0 0 0.5vh white;
+    cursor:pointer;
+}
+
+@media screen and (max-width: 140vh) {
+    .navOptions {
+        display: none;
+    }
+    .headerTitle {
+        width: 10vh;
+    }
+}
+
+.blog {
+    margin-top: 10vh;
+    width: 75vh;
+    max-width: 90vw;
+}
+
+.title {
+    font-size: 5vh;
+    font-weight: 600;
+}
+
+.subtitle {
+    font-size: 2.3vh;
+    color:#888;
+}
+
+.posted {
+    margin-top: 2vh;
+    width: 100%;
+    /* background-color: blue; */
+    border-top: 2px solid red;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.interactions {
+    width: 100%;
+    display: flex;
+    justify-content: end;
+    align-items: center;
+}
+
+.like, .favourite, .share {
+    position: relative;
+    width: 4vh;
+    height: 4vh;
+    border: none;
+    color: #333;
+    background-color: white;
+    transition: all 250ms;
+}
+
+.like:hover {
+    padding-right: 7vh;
+    background-color: transparent;
+}
+
+.share:hover {
+    padding-right: 9vh;
+    background-color: transparent;
+}
+
+.favourite:hover {
+    padding-right: 11vh;
+    background-color: transparent;
+}
+
+.like::before {
+    content: 'Like';
+    position: absolute;
+    top: 0;
+    right: 0.5vh;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: -1;
+    opacity: 0;
+    /* background-color: blue; */
+}
+
+.share::before {
+    content: 'Share';
+    position: absolute;
+    top: 0;
+    right: .5vh;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: -1;
+    opacity: 0;
+}
+
+.favourite::before {
+    content: 'Favorite';
+    position: absolute;
+    top: 0;
+    right: .5vh;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: -1;
+    opacity: 0;
+}
+
+.like:hover::before, .share:hover::before, .favourite:hover::before {
+    opacity: 1;
+}
+
+img {
+    width: 100%;
+}

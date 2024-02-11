@@ -8,14 +8,16 @@
     <script src="/scripts/homePage.js" defer></script>
 </head>
 <body>
+    <div class="scrollbar">
+        <div class="progress"></div>
+    </div>
     <header>
-        <div class="title">Bloggs</div>
+        <div class="headerTitle">Bloggs</div>
         <div class="navOptions">
-            <div class="discover">Discover</div>
-            <div class="mission">Mission</div>
-            <div class="about">About</div>
-            <div class="contact">Contact</div>
-            <div class="monetization">Monetization</div>
+            <div class="discover" data-link="discover">Discover</div>
+            <div class="mission" data-link="mission">Mission</div>
+            <div class="about" data-link="about">About</div>
+            <div class="contact" data-link="contact">Contact</div>
         </div>
         <div class="btns">
             <button class="createBlog">Create a blog</button>
@@ -25,16 +27,16 @@
     <main class="recentBlogs">
         <div class="sectionTitle">Freshly uploaded blogs:</div>
         <div class="blogs">
-            <div class="blog">
+            <div class="blog" data-link="blog/1">
                 <img src="https://ied.eu/wp-content/uploads/2018/04/entrepreneur-1.jpg" class="blogImg">
                 <div class="blogInfo">
                     <div class="blogTitle">How to succeed in life</div>
                     <div class="blogBrief">Everybody wants to achieve something great in there live. But most people don't even try to and just keep dreaming that success will come to them. Thats why in this blog I will show and tell you how to succeed and live hapily.</div>
-                    <div class="creator">By Rosen Kamenov</div>
+                    <div class="creator">By Rosen Kamenov | 4th April 2009</div>
                     <div class="readEstimate">4-6 min read</div>
                 </div>
             </div>
-            <div class="blog">
+            <div class="blog" data-link="blog/2">
                 <img src="https://i.pinimg.com/736x/b5/bc/6c/b5bc6c39875bf1d1f8fe369f543962b5.jpg" class="blogImg">
                 <div class="blogInfo">
                     <div class="blogTitle">From a viewer to a player. Christiano Ronaldo's story</div>
@@ -43,7 +45,7 @@
                     <div class="readEstimate">30-35 min read</div>
                 </div>
             </div>
-            <div class="blog">
+            <div class="blog" data-link="blog/3">
                 <img src="https://i.pinimg.com/736x/51/37/da/5137daf7b29c5f4bc37322122803e597.jpg" class="blogImg">
                 <div class="blogInfo">
                     <div class="blogTitle">How I learned to play the guitar professionally</div>
@@ -52,27 +54,29 @@
                     <div class="readEstimate">30-35 min read</div>
                 </div>
             </div>
-            <div class="blog">
+            <div class="blog" data-link="blog/4">
                 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/Tabby_cat_with_visible_nictitating_membrane.jpg/220px-Tabby_cat_with_visible_nictitating_membrane.jpg" class="blogImg">
                 <div class="blogInfo">
                     <div class="blogTitle">My cat sally</div>
-                    <div class="blogBrief">Everybody wants to achieve something great in there live. But most people don't even try to and just keep dreaming that success will come to them. Thats why in this blog I will show and tell you how to succeed and live hapily.</div>
+                    <div class="blogBrief">Everybody wants to achieve something great in there live. But most people don't even try to and just keep dreaming that success will come to them. Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum doloribus, nihil minima ab esse quia sapiente omnis ipsa reiciendis fuga, inventore eligendi ad dicta beatae facilis sequi praesentium vel! Tenetur, recusandae dolores. Quos, tenetur soluta vero, ratione obcaecati blanditiis corporis quo odit consequuntur quam laborum, alias accusantium? Thats why in this blog I will show and tell you how to succeed and live hapily.</div>
                     <div class="creator">By Sonq Ivanova</div>
                     <div class="readEstimate">50-65 min read</div>
                 </div>
             </div>
-            <div class="blog">
+            <div class="blog" data-link="blog/5">
                 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Deerfire-2.jpg/450px-Deerfire-2.jpg" class="blogImg">
                 <div class="blogInfo">
                     <div class="blogTitle">Extreme wildfires spread all over america</div>
+                    <div class="blogBrief">Everybody wants to achieve something great in there live. But most people don't even try to and just keep dreaming that success will come to them. Thats why in this blog I will show and tell you how to succeed and live hapily.</div>
                     <div class="creator">By Mira Kirilova</div>
                     <div class="readEstimate">13-17 min read</div>
                 </div>
             </div>
-            <div class="blog">
+            <div class="blog" data-link="blog/6">
                 <img src="https://sis.bg/wp-content/uploads/2019/03/agenda-analysis-business-990818-1.jpg" class="blogImg">
                 <div class="blogInfo">
                     <div class="blogTitle">How to start a successful business</div>
+                    <div class="blogBrief">Everybody wants to achieve something great in there live. But most people don't even try to and just keep dreaming that success will come to them. Thats why in this blog I will show and tell you how to succeed and live hapily.</div>
                     <div class="creator">By Yordan Milanov</div>
                     <div class="readEstimate">5-7 min read</div>
                 </div>
