@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="/styles/login.css">
+    <script src="/scripts/login.js" defer></script>
+</head>
+<body>
+    <div class="scrollbar">
+        <div class="progress"></div>
+    </div>
+    <header>
+        <div class="headerTitle" data-link="./">Bloggs</div>
+        <div class="navOptions">
+            <div class="home" data-link="./">Home</div>
+            <div class="discover" data-link="./discover">Discover</div>
+            <div class="mission" data-link="./mission">Mission</div>
+            <div class="about" data-link="./about">About</div>
+            <div class="contact" data-link="./contact">Contact</div>
+        </div>
+        <div class="btns">
+            <button class="createBlog" data-link="./create">Create a blog</button>
+            <button class="login" data-link="./register">Register</button>
+        </div>
+    </header>
+        <div class="loginSec">
+            <div class="title">Log in</div>
+            <div class="incorrectData">Incorrect email or password!</div>
+            <form action="/login" method="post">
+                <input required type="email" name="email" class="email" placeholder="Email">
+                <input required type="password" name="password" class="password" placeholder="Password">
+                <input required type="submit" value="Log in">
+            </form>            
+        </div>
+        <div class="signupSec">
+            <div class="title">New here?</div>
+            <div class="desc">Create an account. And create something amazing!</div>
+            <button data-link="./register" class="signupRedirect">Create an account</button>
+        </div>
+</body>
+</html>

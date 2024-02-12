@@ -1,0 +1,230 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+* {
+    font-family: poppins;
+    font-size: 2vh;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* flex-direction: column; */
+    overflow: hidden;
+}
+
+::-webkit-scrollbar {
+    display: none;
+}
+
+.scrollbar {
+    width: 5px;
+    position: fixed;
+    right: 0;
+    top: 0;
+    height: 100vh;
+    background-color: #ddd;   
+}
+
+.progress {
+    width: 100%;
+    height: 0%;
+    background-color: red;
+    border-radius: 5px;
+    transition: all 250ms;
+}
+
+header {
+    position: fixed;
+    left: 0;
+    top:0;
+    padding-inline: 1.5vh;
+    width: calc(100% - 3vh);
+    height: 8vh;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: red;
+    z-index: 2;
+}
+
+.headerTitle {
+    font-size: 4.5vh;
+    font-weight: 900;
+    color:white;
+    width: 35vh;
+}
+
+.createBlog {
+    width: 20vh;
+    height: 5vh;
+    background-color: red;
+    border: 2px solid white;
+    border-radius: 0.5vh;
+    color: white;
+    font-weight: 700;
+    transition: all 250ms;
+    max-width: 40vw;
+}
+
+.login {
+    width: 15vh;
+    height: 5vh;
+    background-color: white;
+    border: 2px solid white;
+    border-radius: .5vh;
+    color:red;
+    font-weight: 700;
+    transition: all 250ms;
+    max-width: 23vw;
+}
+
+.createBlog:hover, .login:hover {
+    box-shadow: 0 0 1.5vh white;
+    cursor:pointer;
+}
+
+.navOptions {
+    width: 40vw;
+    color: white;
+    height: 8vh;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    font-weight: 500;
+    transition: all 250ms;
+}
+
+.navOptions > *:hover {
+    text-shadow: 0 0 0.5vh white;
+    cursor:pointer;
+}
+
+@media screen and (max-width: 140vh) {
+    .navOptions {
+        display: none;
+    }
+    .headerTitle {
+        width: 10vh;
+    }
+}
+
+.loginSec > .title {
+    font-size: 4.5vh;
+    font-weight: 900;
+    color: red;
+}
+
+.loginSec {
+    position: relative;
+    width: 85vh;
+    max-width: 65vw;
+    padding: 1vh;
+    padding-right: 3vh;
+    border-right: 5px solid red;
+}
+
+.signupSec {
+    width: 40vh;
+    max-width: 32vw;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    margin-left: 3vh;
+}
+
+.signupSec >.title {
+    font-size: 4.5vh;
+    font-weight: 900;
+    color: red;
+}
+
+.desc {
+    width: 100%;
+    text-align: center;
+}
+
+.signupRedirect {
+    width: 60%;
+    max-width: 30vh;
+    background-color: red;
+    color: white;
+    border: 2px solid red;
+    border-radius: 0.5vh;
+    height: 5vh;
+    margin-top: 1vh;
+    font-weight: 600;
+}
+
+@media screen and (max-width: 115vh) {
+    body {
+        flex-direction: column;
+    }
+    .loginSec {
+        border: none;
+        border-bottom: 5px solid red;
+        padding: 1vh;
+        padding-bottom: 3vh;
+        margin: 3vh;
+        width: 100%;
+        max-width: 90vw;
+    }
+
+    .signupSec {
+        width: 100%;
+        max-width: 90vw;
+        margin: 0;
+    }
+}
+
+input {
+    height: 5vh;
+    border: 2px solid red;
+    border-radius: 0.5vh;
+}
+
+form {
+    width: 100%;
+    display: grid;
+    grid-template-columns:repeat(2, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    row-gap: 1vh;
+    column-gap: 1.2vh;
+    margin: 0;
+    padding: 0;
+    /* background-color: blue; */
+}
+
+input[type="password"], input[type="email"], input[type="text"] {
+    width: calc(100% - 1vh);
+    margin: 0;
+    padding: 0;
+    padding-left: 1vh;
+}
+
+input[type="submit"] {
+    width: 15vh;
+    position: relative;
+    background-color: red;
+    color: white;
+    font-weight: 600;
+}
+
+input[type="password"], input[type='email'] {
+    grid-column: span 2;
+}
+
+.incorrectData {
+    color: red;
+    font-weight: 600;
+    margin-bottom: 1vh;
+    display: none;
+}
+
+.incorrectData.show {
+    display: block;
+}

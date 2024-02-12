@@ -36,6 +36,48 @@ body {
     transition: all 250ms;
 }
 
+.btns {
+    display: flex;
+    align-items: center;
+}
+
+.user {
+    display: flex;
+    align-items: center;
+    margin-left: 1vh;
+}
+
+.profile {
+    width: 5vh;
+    height: 5vh;
+    border-radius: 50%;
+    color: white;
+    background-color: red;
+    border: 2px solid white;
+    padding: 0;
+    margin: 0;
+    margin-left: 2vh;
+}
+
+.profile:hover {
+    box-shadow: 0 0 1.5vh white;
+    cursor:pointer;
+}
+
+.profile > i {
+    font-size: 2vh;
+    padding: 0;
+    margin: 0;
+}
+
+.userName {
+    font-size: 1.5vh;
+    font-weight: 900;
+    color: white;
+    margin-left: 1vh;
+    width: min-content;
+}
+
 header {
     position: fixed;
     left: 0;
@@ -113,9 +155,47 @@ header {
 
 .blog {
     margin-top: 10vh;
-    width: 75vh;
-    max-width: 90vw;
+    width: 95vh;
+    max-width: 85vw;
+    height: max-content;
+    padding-bottom: 4vh;
 }
+
+.blog > * {
+    font-size: 4vh;
+}
+
+@media screen and (max-width: 140vh) {
+    .user, .createBlog, .headerTitle, .login{
+        transform: scale(80%);
+    }
+    .login {
+        margin-left: auto;
+        position: relative;
+        left: 3vw;
+    }
+    .user {
+        transform: scale(70%);
+        position: relative;
+        right: 6vw;
+    }
+    .createBlog {
+        position: relative;
+        left: 4vw;
+    }
+    .userName {
+        font-size: 2vh;
+    }
+    .headerTitle {
+        transform: scale(70%);
+        position: relative;
+        right: 1vh;
+    }
+    .btns:has(.login)  > .createBlog {
+        left: 7vw;
+    }
+}
+
 
 .title {
     font-size: 5vh;
@@ -215,4 +295,40 @@ header {
 
 img {
     width: 100%;
+}
+
+.partSeperator {
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    border-top: 2px dashed red;
+    margin-block: 4vh;
+}
+
+.sectionTitle {
+    font-size: 3.5vh;
+    font-weight: 600;
+}
+
+.quote {
+    width: 100%;
+    /* height: 10vh; */
+    border-left: 0.6vh solid black;
+    padding: 2vh;
+    position: relative;
+    right: 2.6vh;
+    font-style: italic;
+}
+
+main > * {
+    font-size: 2.5vh;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+li {
+    font-size: 2.5vh;
 }

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <link rel="stylesheet" href="/styles/register.css">
+    <script src="/scripts/register.js" defer></script>
+</head>
+<body>
+    <div class="scrollbar">
+        <div class="progress"></div>
+    </div>
+    <header>
+        <div class="headerTitle" data-link="./">Bloggs</div>
+        <div class="navOptions">
+            <div class="home" data-link="./">Home</div>
+            <div class="discover" data-link="./discover">Discover</div>
+            <div class="mission" data-link="./mission">Mission</div>
+            <div class="about" data-link="./about">About</div>
+            <div class="contact" data-link="./contact">Contact</div>
+        </div>
+        <div class="btns">
+            <button class="createBlog" data-link="./create">Create a blog</button>
+            <button class="login" data-link="./login">Log in</button>
+        </div>
+    </header>
+        <div class="loginSec">
+            <div class="title">Register</div>
+            <div class="emailTaken">Email already in use!</div>
+            <form action="/register" method="post">
+                <input required type="text" name="firstName" class="firstName" placeholder="First name">
+                <input required type="text" name="lastName" class="lastName" placeholder="Last name">
+                <input required type="email" name="email" class="email" placeholder="Email">
+                <input required type="password" name="password" class="password" placeholder="Password">
+                <input required type="submit" value="Register" class="submit">
+            </form>            
+        </div>
+        <div class="signupSec">
+            <div class="title">Already a part of us?</div>
+            <div class="desc">Log in a continue doing amazing things.</div>
+            <button data-link="./login" class="signupRedirect">Log in</button>
+        </div>
+</body>
+</html>

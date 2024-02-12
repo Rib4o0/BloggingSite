@@ -6,6 +6,7 @@
     <title>Bloggs</title>
     <link rel="stylesheet" href="/styles/homePage.css" />
     <script src="/scripts/homePage.js" defer></script>
+    <script src="https://kit.fontawesome.com/1ee8f271b9.js" crossorigin="anonymous"></script>
 </head>
 <body>
     <div class="scrollbar">
@@ -20,8 +21,20 @@
             <div class="contact" data-link="contact">Contact</div>
         </div>
         <div class="btns">
-            <button class="createBlog">Create a blog</button>
-            <button class="login" onclick="window.location = './login'">Log in</button>
+            <button class="createBlog" data-link="create">Create a blog</button>
+            <button class="login" data-link="login">Log in</button>
+            <div class="user">
+                <div class="userName">Rosen Kamenov</div>
+                <button class="profile"><i class="fa-regular fa-user"></i></button>
+            </div>
+        </div>
+        <div class="profileSettings">
+            <div>Profile</div>
+            <div>Liked</div>
+            <div>Favourites</div>
+            <div>Settings</div>
+            <div>Log out</div>
+            <div class="email">r****@gmail.com</div>
         </div>
     </header>
     <main class="recentBlogs">
