@@ -151,6 +151,11 @@ header {
     align-items: center;
 }
 
+.profileSettings > div:hover:not(.profileSettingsContent:last-child) {
+    text-shadow: 0 0 1.5vh white;
+    cursor:pointer;
+}
+
 .profileSettings.show {
     opacity: 1;
     pointer-events: all;

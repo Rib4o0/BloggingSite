@@ -31,13 +31,18 @@ fs.readFile(path.join(__dirname, 'Data','sessions.json'), 'utf8', (err, data) =>
 app.get('*', (req, res, next) => {
   if (req.cookies.sessionid) {
     for (let session of sessions) {
-      if (req.cookies.sessionid == session.id) {
+      if (req.cookies.sessionid == session.id && req.ip == session.ip) {
         req.session = session; 
+      } else {
+        res.clearCookie('sessionid');
+        req.session = null;
+        res.redirect('/login');
       }
     }
   } 
   else {
     req.session = null;
+    res.redirect('/login');
   }
   next()
 });
@@ -60,6 +65,11 @@ app.get('/get-blog-data/:id', (req,res) => {
   res.send(blogData);
 })
 
+app.get('/create', (req, res) => {
+  if (req.session == null) res.redirect('/login');
+  else res.sendFile(path.join(__dirname,'static','create.html'));
+})
+
 // Login and signup ------------------------------
 
 app.get('/login', (req, res) => {
@@ -73,8 +83,22 @@ app.post('/login', (req, res) => {
   for (let user of users) {
     if (user.email == email && user.password == password) {
       correctData = true;
-      let session = {firstName: user.firstName, lastName: user.lastName, email: user.email, id: generateUniqueSessionId()};
-      sessions.push(session);
+      let sessionExists = false;
+      let prevSession;
+      for (let session of sessions) {
+        if (session.email == email && session.ip == req.ip) {
+          sessionExists = true;
+          prevSession = session;
+        }
+      }
+      let session;
+      if (!sessionExists) {
+        session = {firstName: user.firstName, lastName: user.lastName, email: user.email, id: generateUniqueSessionId(), ip: req.ip};
+        sessions.push(session);
+      }
+      else {
+        session = prevSession;
+      }
       res.cookie('sessionid', session.id);
       saveData();
       res.redirect('/');

@@ -34,9 +34,7 @@ fetch('/get-user')
 })
 
 window.addEventListener('click', e => {
-    user.textContent = e.target
-    if (e.target != user) {
+    if (e.target != user && e.target.parentNode != user && e.target != profileSettings) {
         profileSettings.classList.remove('show');
-        user.textContent = "hello nigga"
     }
 });
