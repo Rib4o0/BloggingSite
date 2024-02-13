@@ -30,19 +30,20 @@ fs.readFile(path.join(__dirname, 'Data','sessions.json'), 'utf8', (err, data) =>
 
 app.get('*', (req, res, next) => {
   if (req.cookies.sessionid) {
+    let sessionFound = false;
     for (let session of sessions) {
       if (req.cookies.sessionid == session.id && req.ip == session.ip) {
         req.session = session; 
-      } else {
-        res.clearCookie('sessionid');
-        req.session = null;
-        res.redirect('/login');
+        sessionFound = true;
       }
+    }
+    if (!sessionFound) {
+      res.clearCookie('sessionid');
+      req.session = null;
     }
   } 
   else {
     req.session = null;
-    res.redirect('/login');
   }
   next()
 });

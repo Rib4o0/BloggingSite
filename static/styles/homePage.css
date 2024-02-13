@@ -49,14 +49,17 @@ header {
 }
 
 .btns {
-    display: flex;
-    align-items: center;
+    display: grid;
+    grid-template-columns: repeat(2, max-content);
+    place-items: center;
+    width: min-content;
 }
 
 .user {
     display: flex;
     align-items: center;
     margin-left: 1vh;
+    width: auto;
 }
 
 .profile {
@@ -263,11 +266,14 @@ main {
     .user {
         transform: scale(70%);
         position: relative;
-        left: 2vh;
+        /* left: 2vh; */
+        right: -2vh;
     }
     .createBlog {
+        margin: 0;
         position: relative;
-        left: 4vw;
+        /* left: 7vh; */
+        left: 7vh;
     }
     .userName {
         font-size: 2vh;
@@ -279,6 +285,11 @@ main {
     }
     .btns:has(.login)  > .createBlog {
         left: 7vw;
+    }
+
+    .btns {
+        width: 50%;
+        justify-content: end;
     }
 }
 
