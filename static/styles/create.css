@@ -243,16 +243,22 @@ header {
     position: relative;
 }
 
+main > textarea {
+    font-size: 2.5vh;
+}
+
 .title {
     font-size: 5vh;
     font-weight: 600;
     caret-color: gray;
+    line-height: 1;
 }
 
 .subtitle {
     font-size: 2.3vh;
     color:#888;
     caret-color: #888;
+    line-height: 1;
 }
 
 .textarea {
@@ -260,12 +266,12 @@ header {
     resize: none;
     width: 100%;
     border: none;
-    line-height: 1;
     padding: 0;
     display: flex;
     justify-content: center;
     align-items: center;
     padding-block: 1vh;
+    /* background-color: blue; */
 }
 
 .textarea:focus {
@@ -283,14 +289,137 @@ header {
     border-right: 1px solid gray;
     padding-right: 1vh;
     opacity: 0;
+    transition: height 500ms, opacity 100ms;
 }
 
 .title:focus + .titleLabel {
     opacity: 1;
 }
 
-@media screen and (max-width: 88vh) {
+.subtitleLabel {
+    position: absolute;
+    top: 8.5vh;
+    left: -9.4vh;
+    display: flex;
+    align-items: center;
+    height: 2.5vh;
+    color: gray;
+    border-right: 1px solid gray;
+    padding-right: 1vh;
+    opacity: 0;
+    transition: height 500ms, opacity 100ms, top 500ms;
+}
+
+.subtitle:focus +.subtitleLabel {
+    opacity: 1;
+}
+
+@media screen and (max-width: 120vh) {
     .title:focus + .titleLabel {
         opacity: 0;
     }
+    .subtitle:focus + .subtitleLabel {
+        opacity: 0;
+    }
+}
+
+img {
+    width: 100%;
+}
+
+.partSeperator {
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    border-top: 2px dashed red;
+    margin-block: 4vh;
+}
+
+.sectionTitle {
+    font-size: 3.5vh;
+    font-weight: 600;
+}
+
+.quote {
+    width: 100%;
+    border-left: 0.6vh solid black;
+    padding-inline: 2vh;
+    padding-block: 2.2vh 0.6vh;
+    margin-block:1vh;
+    position: relative;
+    right: 2.6vh;
+    font-style: italic;
+}
+
+.add {
+    width: 10%;
+    height: 4vh;
+    background-color: red;
+    color: white;
+    font-weight: 600;
+    font-size: 2vh;
+    border: none;
+    border-radius: 0.5vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: .5vh;
+    transition: all 250ms;
+    z-index: 1;
+    margin-top: 0.2vh;
+    border: 0.1vh solid red;
+}
+
+.add > * {
+    pointer-events: none;
+}
+
+.add > i {
+    transform: rotate(45deg);
+    transition: all 250ms;
+}
+
+.add.open {
+    width: 4vh;
+    height: 4vh;
+    border-radius: 50%;
+    /* color: red;
+    background-color: white; */
+    border: 0.1vh solid red;
+}
+
+.add.open > i {
+    transform: rotate(0deg);
+}
+
+.add.open + .addOptions {
+    opacity: 1;
+}
+
+.addOptions {
+    position: relative;
+    width: min-content;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    opacity: 0;
+    z-index: -1;
+    transition: all 250ms;
+}
+
+.addOptions > i {
+    width: 4vh;
+    height: 4vh;
+    border-radius: 50%;
+    border: 0.1vh solid red;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 1vh;
+    padding: .5vh;
+    color: red;
+    position: relative;
+    bottom: 5.2vh;
+    left:6.2vh;
 }
