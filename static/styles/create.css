@@ -11,7 +11,8 @@ body {
     width: 100vw;
     height: 100vh;
     display: flex;
-    justify-content: center;
+    align-items: center;
+    flex-direction: column;
     overflow-x: hidden;
 }
 
@@ -265,6 +266,7 @@ main > textarea {
     position: relative;
     resize: none;
     width: 100%;
+    min-height: 1vh;
     border: none;
     padding: 0;
     display: flex;
@@ -394,7 +396,9 @@ img {
 }
 
 .add.open + .addOptions {
+    left: 6.2vh;
     opacity: 1;
+    z-index: 1;
 }
 
 .addOptions {
@@ -406,6 +410,7 @@ img {
     opacity: 0;
     z-index: -1;
     transition: all 250ms;
+    left: .2vh;
 }
 
 .addOptions > i {
@@ -421,5 +426,28 @@ img {
     color: red;
     position: relative;
     bottom: 5.2vh;
-    left:6.2vh;
+    pointer-events: all;
+}
+
+.paragraphSettings {
+    position: absolute;
+    top: 10vh;
+    left: 3vh;
+    opacity: 0;
+    transform: translateX(-110%);
+    width: 3vh;
+    height: 3vh;
+    /* border-radius: 50%; */
+    /* border: 0.1vh solid #888; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.paragraphSettings > i {
+    color: #888;
+}
+
+.paragraphSettings.show {
+    opacity: 1;
 }

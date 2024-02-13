@@ -1,40 +1,88 @@
-const textareas = document.querySelectorAll('.textarea');
 const title = document.querySelector('.textarea.title');
 const titleLabel = document.querySelector('.titleLabel');
 const subtitle = document.querySelector('.textarea.subtitle');
 const subtitleLabel = document.querySelector('.subtitleLabel');
+const paragraphSettings = document.querySelector('.paragraphSettings');
 title.addEventListener('input', () => {
     title.value = title.value.replace(/\n/g, '');
     autoExpand(title);
     titleLabel.style.height = (title.offsetHeight-window.innerHeight*0.025) + 'px';
     subtitleLabel.style.top = (title.offsetHeight+window.innerHeight*0.009) + 'px';
     blogData.title = title.value;
-    user.textContent = JSON.stringify(blogData);
+    saveBlogData();
 });
 subtitle.addEventListener('input', () => {
     subtitle.value = subtitle.value.replace(/\n/g, '');
     autoExpand(subtitle);
     subtitleLabel.style.height = (subtitle.offsetHeight-window.innerHeight*0.025) + 'px';
     blogData.subtitle = subtitle.value;
+    saveBlogData();
 });
-textareas.forEach(textarea => {
-    autoExpand(textarea)
-    titleLabel.style.height = (title.offsetHeight-window.innerHeight*0.025) + 'px';
-    subtitleLabel.style.top = (title.offsetHeight+window.innerHeight*0.009) + 'px';
-    subtitleLabel.style.height = (subtitle.offsetHeight-window.innerHeight*0.025) + 'px';
-    textarea.addEventListener('keydown', function (e) {
-        if (e.key === 'Enter' || e.keyCode === 13) {
-          e.preventDefault(); // Prevent newline
-          
+
+calibrateTextAreas();
+function calibrateTextAreas() {
+    const textareas = document.querySelectorAll('.textarea');
+    console.log('Calibrating')
+    textareas.forEach(textarea => {
+        autoExpand(textarea)
+        titleLabel.style.height = (title.offsetHeight-window.innerHeight*0.025) + 'px';
+        subtitleLabel.style.top = (title.offsetHeight+window.innerHeight*0.009) + 'px';
+        subtitleLabel.style.height = (subtitle.offsetHeight-window.innerHeight*0.025) + 'px';
+        textarea.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter' || e.keyCode === 13) {
+              e.preventDefault(); // Prevent newline
+              console.log('addedParagraph');
+              const paragraph = document.createElement('textarea');
+              paragraph.classList.add('paragraph');
+              paragraph.classList.add('textarea');
+              paragraph.setAttribute('rows', 1);
+              paragraph.setAttribute('oninput', 'autoExpand(this)');
+              blog.insertBefore(paragraph, this.nextSibling)
+              calibrateTextAreas()
+              paragraph.focus();
+            }
+            if (e.key === 'Backspace' || e.keyCode === 8) {
+                e.preventDefault(); 
+                if (textarea.value == '') {
+                    if (textarea != title && textarea != subtitle) textarea.remove();
+                } else {
+                    textarea.value = textarea.value.slice(0, -1);
+                }
+            }
+            autoExpand(this);
+            saveBlogData();
+        });
+        
+        if (textarea != title && textarea != subtitle ) {
+            textarea.addEventListener('focus', () => {
+            paragraphSettings.classList.add('show');
+            let left = textarea.getBoundingClientRect().left;
+            let height = textarea.getBoundingClientRect().height;
+            let top = textarea.getBoundingClientRect().top;
+            paragraphSettings.style.left = left + 'px';
+            paragraphSettings.style.top = (top + height/6) + 'px';
+            console.log(left,height,top);
+            });
+        } else {
+            textarea.addEventListener('focus', () => {
+                paragraphSettings.classList.remove('show');
+            });
         }
-      });
-})
+    })
+}
+
+function checkNoFocus() {
+    if (!document.activeElement || document.activeElement === document.body) {
+     paragraphSettings.classList.remove('show');
+    } 
+  }
+
+checkNoFocus();
+setInterval(checkNoFocus, 100);
 
 function autoExpand(textarea) {
-    // Reset the textarea's height to the default before getting its scrollHeight
+    textarea.dataset.value = textarea.value;
     textarea.style.height = 'auto';
-
-    // Set the textarea's height to its scrollHeight, allowing it to expand
     textarea.style.height = (textarea.scrollHeight-10) + 'px';
 }
 
@@ -48,8 +96,35 @@ addBtn.addEventListener('click', () => {
     }
 });
 
+const blog = document.querySelector('.blog');
+const addParagraph = document.querySelector('.addParagraph');
+addParagraph.addEventListener('click', () => {
+    console.log('addedParagraph');
+    const paragraph = document.createElement('textarea');
+    paragraph.classList.add('paragraph');
+    paragraph.classList.add('textarea');
+    paragraph.setAttribute('rows', 1);
+    paragraph.setAttribute('oninput', 'autoExpand(this)');
+    blog.insertBefore(paragraph, addBtn)
+    addBtn.classList.remove('open');
+    calibrateTextAreas()
+    paragraph.focus();
+    saveBlogData();
+});
+const addImage = document.querySelector('.addImage');
+const addQuote = document.querySelector('.addQuote');
+const addList = document.querySelectorAll('.addList');
+const addSection = document.querySelector('.addSection');
+
 const blogData = {creator: '', publishDate: '', title: '', subtitle: '', image: '', sections: []};
 blogData.publishDate = new Date().toISOString().slice(0, 10);
+
+function saveBlogData() {
+    blogData.title = title.value;
+    blogData.subtitle = subtitle.value;
+    console.log(JSON.stringify(blogData));
+    console.log(blog.innerHTML)
+}
 
 const links = document.querySelectorAll('[data-link]');
 links.forEach(link => {
