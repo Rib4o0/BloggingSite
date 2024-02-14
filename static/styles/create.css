@@ -103,8 +103,8 @@ header {
     width: 35vh;
 }
 
-.createBlog {
-    width: 20vh;
+.createBlog, .postBlog {
+    width: 10vh;
     height: 5vh;
     background-color: red;
     border: 2px solid white;
@@ -197,7 +197,7 @@ header {
         grid-template-columns: repeat(1, 1fr);
         grid-template-rows: repeat(6, 30vh);
     }
-    .user, .createBlog, .headerTitle, .login{
+    .user, .createBlog, .headerTitle, .login, .postBlog{
         transform: scale(80%);
     }
     .login {
@@ -211,11 +211,11 @@ header {
         /* left: 2vh; */
         right: -2vh;
     }
-    .createBlog {
+    .createBlog,.postBlog {
         margin: 0;
         position: relative;
         /* left: 7vh; */
-        left: 7vh;
+        left: 5.5vh;
     }
     .userName {
         font-size: 2vh;
@@ -329,6 +329,12 @@ img {
     width: 100%;
 }
 
+.textarea.image {
+    border-bottom: 0.1vh solid red;
+    padding-bottom: 0.1vh;
+    margin-bottom: 1.5vh;
+}
+
 .partSeperator {
     position: relative;
     left: 50%;
@@ -429,25 +435,8 @@ img {
     pointer-events: all;
 }
 
-.paragraphSettings {
-    position: absolute;
-    top: 10vh;
-    left: 3vh;
-    opacity: 0;
-    transform: translateX(-110%);
-    width: 3vh;
-    height: 3vh;
-    /* border-radius: 50%; */
-    /* border: 0.1vh solid #888; */
-    display: flex;
-    justify-content: center;
-    align-items: center;
+li, .listItem {
+    font-size: 2.5vh;
+    padding-bottom: 0;
 }
 
-.paragraphSettings > i {
-    color: #888;
-}
-
-.paragraphSettings.show {
-    opacity: 1;
-}

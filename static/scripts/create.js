@@ -2,7 +2,6 @@ const title = document.querySelector('.textarea.title');
 const titleLabel = document.querySelector('.titleLabel');
 const subtitle = document.querySelector('.textarea.subtitle');
 const subtitleLabel = document.querySelector('.subtitleLabel');
-const paragraphSettings = document.querySelector('.paragraphSettings');
 title.addEventListener('input', () => {
     title.value = title.value.replace(/\n/g, '');
     autoExpand(title);
@@ -22,7 +21,6 @@ subtitle.addEventListener('input', () => {
 calibrateTextAreas();
 function calibrateTextAreas() {
     const textareas = document.querySelectorAll('.textarea');
-    console.log('Calibrating')
     textareas.forEach(textarea => {
         autoExpand(textarea)
         titleLabel.style.height = (title.offsetHeight-window.innerHeight*0.025) + 'px';
@@ -30,57 +28,47 @@ function calibrateTextAreas() {
         subtitleLabel.style.height = (subtitle.offsetHeight-window.innerHeight*0.025) + 'px';
         textarea.addEventListener('keydown', function (e) {
             if (e.key === 'Enter' || e.keyCode === 13) {
-              e.preventDefault(); // Prevent newline
-              console.log('addedParagraph');
-              const paragraph = document.createElement('textarea');
-              paragraph.classList.add('paragraph');
-              paragraph.classList.add('textarea');
-              paragraph.setAttribute('rows', 1);
-              paragraph.setAttribute('oninput', 'autoExpand(this)');
-              blog.insertBefore(paragraph, this.nextSibling)
-              calibrateTextAreas()
-              paragraph.focus();
+                e.preventDefault(); // Prevent newline
+                if (this.dataset.keyPressed == 'false') {
+                    this.dataset.keyPressed = 'true';
+                    if (textarea.classList.contains('image')) {
+                        const image = document.createElement('img');
+                        image.src = textarea.value;
+                        image.classList.add('image');
+                        if (textarea.value != '')blog.insertBefore(image, this.nextSibling);
+                        this.remove();
+                        calibrateTextAreas()
+                    } else if (!textarea.classList.contains('title') && !textarea.classList.contains('subtitle')) {
+                        const paragraph = document.createElement('textarea');
+                        paragraph.classList.add('paragraph');
+                        paragraph.classList.add('textarea');
+                        paragraph.setAttribute('rows', 1);
+                        paragraph.setAttribute('oninput', 'autoExpand(this)');
+                        blog.insertBefore(paragraph, this.nextSibling)
+                        calibrateTextAreas()
+                        paragraph.focus();
+                    }
+                } 
             }
             if (e.key === 'Backspace' || e.keyCode === 8) {
-                e.preventDefault(); 
                 if (textarea.value == '') {
                     if (textarea != title && textarea != subtitle) textarea.remove();
-                } else {
-                    textarea.value = textarea.value.slice(0, -1);
                 }
             }
             autoExpand(this);
             saveBlogData();
         });
-        
-        if (textarea != title && textarea != subtitle ) {
-            textarea.addEventListener('focus', () => {
-            paragraphSettings.classList.add('show');
-            let left = textarea.getBoundingClientRect().left;
-            let height = textarea.getBoundingClientRect().height;
-            let top = textarea.getBoundingClientRect().top;
-            paragraphSettings.style.left = left + 'px';
-            paragraphSettings.style.top = (top + height/6) + 'px';
-            console.log(left,height,top);
-            });
-        } else {
-            textarea.addEventListener('focus', () => {
-                paragraphSettings.classList.remove('show');
-            });
-        }
+
+        textarea.addEventListener('keyup', function (e) {
+            this.dataset.keyPressed = 'false';
+        })
     })
 }
 
-function checkNoFocus() {
-    if (!document.activeElement || document.activeElement === document.body) {
-     paragraphSettings.classList.remove('show');
-    } 
-  }
-
-checkNoFocus();
-setInterval(checkNoFocus, 100);
+setInterval(saveBlogData, 100);
 
 function autoExpand(textarea) {
+    textarea.value = textarea.value.replace(/\n/g, '');
     textarea.dataset.value = textarea.value;
     textarea.style.height = 'auto';
     textarea.style.height = (textarea.scrollHeight-10) + 'px';
@@ -112,18 +100,86 @@ addParagraph.addEventListener('click', () => {
     saveBlogData();
 });
 const addImage = document.querySelector('.addImage');
+addImage.addEventListener('click', () => {
+    const imageUrl = document.createElement('textarea');
+    imageUrl.classList.add('image');
+    imageUrl.classList.add('textarea');
+    imageUrl.setAttribute('rows', 1);
+    imageUrl.setAttribute('oninput', 'autoExpand(this)');
+    imageUrl.setAttribute('onblur', 'this.remove();');
+    imageUrl.setAttribute('placeholder', 'Enter Image URL');
+    blog.insertBefore(imageUrl, addBtn)
+    addBtn.classList.remove('open');
+    calibrateTextAreas();
+    imageUrl.focus();
+    saveBlogData();
+});
 const addQuote = document.querySelector('.addQuote');
+addQuote.addEventListener('click', () => {
+    console.log('addedQuote');
+    const quote = document.createElement('textarea');
+    quote.classList.add('quote');
+    quote.classList.add('textarea');
+    quote.setAttribute('rows', 1);
+    quote.setAttribute('oninput', 'autoExpand(this)');
+    blog.insertBefore(quote, addBtn)
+    addBtn.classList.remove('open');
+    calibrateTextAreas()
+    quote.focus();
+    saveBlogData();
+});
 const addList = document.querySelectorAll('.addList');
 const addSection = document.querySelector('.addSection');
+addSection.addEventListener('click', () => {
+    const section = document.createElement('div');
+    section.classList.add('partSeperator');
+    blog.insertBefore(section, addBtn)
+    addBtn.classList.remove('open');
+    saveBlogData();
+});
 
-const blogData = {creator: '', publishDate: '', title: '', subtitle: '', image: '', sections: []};
+const postBlog = document.querySelector('.postBlog');
+postBlog.addEventListener('click', () => {
+    fetch('/post-blog', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(blogData)
+    })
+});
+
+const blogData = {readEstimate: 0, creator: '', publishDate: '', title: '', subtitle: '', image: '', sections: []};
 blogData.publishDate = new Date().toISOString().slice(0, 10);
 
 function saveBlogData() {
     blogData.title = title.value;
     blogData.subtitle = subtitle.value;
-    console.log(JSON.stringify(blogData));
-    console.log(blog.innerHTML)
+    let contentElements = Array.from(blog.children);
+    blogData.sections = [];
+    let sectionObject = {title: '', content: []};
+    let text = ''
+    for (let content of contentElements) {
+        if (content.classList.contains('partSeperator')) {
+            blogData.sections.push(sectionObject);
+            sectionObject = {title: '', content: []};
+        } else {
+            if (content.classList.contains('paragraph')) {
+                sectionObject.content.push({text: content.value});
+                text += content.value;
+            }
+            if (content.classList.contains('quote')) {
+                sectionObject.content.push({quote: content.value});
+                text += content.value;
+            }
+            if (content.classList.contains('image')) {
+                sectionObject.content.push({image: content.src});
+            }
+        }
+    }
+    blogData.readEstimate = Math.round(text.length/1000+1);
+    blogData.sections.push(sectionObject);
+    document.querySelector('.console').textContent =  JSON.stringify(blogData)
 }
 
 const links = document.querySelectorAll('[data-link]');

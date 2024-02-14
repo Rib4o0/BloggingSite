@@ -71,6 +71,29 @@ app.get('/create', (req, res) => {
   else res.sendFile(path.join(__dirname,'static','create.html'));
 })
 
+app.get('/get-recent-blogs', (req, res) => {
+  let numOfBlogs = blogs.length;
+  if (numOfBlogs > 6) numOfBlogs = 6;
+  const blogsPackage = [];
+  for (let i = 0; i < numOfBlogs; i++) {
+    blogsPackage.push(blogs[blogs.length - 1 - i]);
+  }
+  console.log(blogsPackage);
+  res.json(blogsPackage);
+})
+
+// app.get('/get-blogging-ids', (req, res) => {
+//   let id = {id: generateUniqueSessionId()};
+//   res.json(id);
+// })
+
+app.post('/post-blog', (req, res) => {
+  const blogData = req.body;
+  blogData.id = generateUniqueSessionId();
+  blogs.push(blogData);
+  saveData();
+})
+
 // Login and signup ------------------------------
 
 app.get('/login', (req, res) => {
@@ -253,6 +276,9 @@ function saveData() {
     if (err) throw err;
   })
   fs.writeFile(path.join(__dirname, 'Data','sessions.json'), JSON.stringify(sessions), (err) => {
+    if (err) throw err;
+  })
+  fs.writeFile(path.join(__dirname, 'Data', 'blogs.json'), JSON.stringify(blogs), (err) => {
     if (err) throw err;
   })
 }

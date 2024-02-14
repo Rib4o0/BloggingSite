@@ -128,13 +128,18 @@ function createBlog() {
     const subtitle = document.querySelector('.subtitle');
     const creator = document.querySelector('.creator');
     const date = document.querySelector('.date');
-    const img = document.querySelector('.img');
     const main = document.querySelector('.main');
+    const briefing = document.querySelector('.briefing');
     title.textContent = blogData.title;
     subtitle.textContent = blogData.subtitle;
     creator.textContent = blogData.creator;
     date.textContent = blogData.publishDate;
-    img.src = blogData.image;
+    if (blogData.image != '') {
+        const image = document.createAttribute('img');
+        image.classList.add('img');
+        image.src = blogData.image;
+        briefing.appendChild(image);
+    }
     for (section of blogData.sections) {
         const sectionTitle = document.createElement('div');
         sectionTitle.classList.add('sectionTitle');
@@ -154,7 +159,7 @@ function createBlog() {
             }
             if (content.quote) {
                 const quote = document.createElement('p');
-                quote.textContent = '“' + content.quote + '”';
+                quote.textContent = content.quote;
                 quote.classList.add('quote');
                 main.appendChild(quote);
             }
