@@ -135,7 +135,7 @@ function createBlog() {
     creator.textContent = blogData.creator;
     date.textContent = blogData.publishDate;
     if (blogData.image != '') {
-        const image = document.createAttribute('img');
+        const image = document.createElement('img');
         image.classList.add('img');
         image.src = blogData.image;
         briefing.appendChild(image);

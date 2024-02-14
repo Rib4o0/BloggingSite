@@ -179,7 +179,7 @@ function saveBlogData() {
     }
     blogData.readEstimate = Math.round(text.length/1000+1);
     blogData.sections.push(sectionObject);
-    document.querySelector('.console').textContent =  JSON.stringify(blogData)
+    // document.querySelector('.console').textContent =  JSON.stringify(blogData)
 }
 
 const links = document.querySelectorAll('[data-link]');
@@ -217,6 +217,30 @@ fetch('/get-user')
         profileSettings.remove();
     }
 })
+
+var selectedTextElement = document.getElementById('selectedText');
+
+  // Add a selectionchange event listener to the document
+  document.addEventListener('selectionchange', function() {
+    // Use the Selection API to get the selection
+    var selection = window.getSelection();
+
+    // Check if there's a selection and it's not collapsed
+    if (selection && !selection.isCollapsed) {
+      // Get the selected text using toString()
+      var selectedText = selection.toString();
+
+      // Display the selected text in the specified element
+      selectedTextElement.textContent = 'Selected text: ' + selectedText;
+
+      // Perform additional actions based on the selected text
+      // Add your custom logic here
+      console.log('Selected text:', selectedText);
+    } else {
+      // No selection, clear the displayed information
+      selectedTextElement.textContent = 'Selected text will be displayed here.';
+    }
+  });
 
 window.addEventListener('click', e => {
     if (e.target != user && e.target.parentNode != user && e.target != profileSettings) {

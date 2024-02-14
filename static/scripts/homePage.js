@@ -55,8 +55,12 @@ fetch('/get-recent-blogs')
         blogTitle.textContent = blog.title;
         const blogBrief = document.createElement('div');
         blogBrief.classList.add('blogBrief');
-        if (blog.subtitle) blogBrief.textContent = blog.subtitle + '-';
-        
+        if (blog.subtitle) blogBrief.textContent = blog.subtitle + ' - ';
+        for (const section of blog.sections) {
+            for (const content of section.content) {
+                if (content.text) blogBrief.textContent += content.text
+            }
+        }
         const blogCreator = document.createElement('div');
         blogCreator.classList.add('creator');
         blogCreator.textContent = 'By '+ blog.creator + ' | ' + blog.publishDate;

@@ -78,7 +78,6 @@ app.get('/get-recent-blogs', (req, res) => {
   for (let i = 0; i < numOfBlogs; i++) {
     blogsPackage.push(blogs[blogs.length - 1 - i]);
   }
-  console.log(blogsPackage);
   res.json(blogsPackage);
 })
 
