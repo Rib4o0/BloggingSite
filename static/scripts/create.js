@@ -8,6 +8,9 @@ title.addEventListener('input', () => {
     titleLabel.style.height = (title.offsetHeight-window.innerHeight*0.025) + 'px';
     subtitleLabel.style.top = (title.offsetHeight+window.innerHeight*0.009) + 'px';
     blogData.title = title.value;
+    const htmlTitle = document.querySelector('title');
+    htmlTitle.textContent = blogData.title;
+    if (blogData.title == '') blogData.title = 'Untitled';
     saveBlogData();
 });
 subtitle.addEventListener('input', () => {
@@ -129,6 +132,7 @@ addQuote.addEventListener('click', () => {
     saveBlogData();
 });
 const addList = document.querySelectorAll('.addList');
+
 const addSection = document.querySelector('.addSection');
 addSection.addEventListener('click', () => {
     const section = document.createElement('div');
@@ -156,6 +160,7 @@ function saveBlogData() {
     blogData.title = title.value;
     blogData.subtitle = subtitle.value;
     let contentElements = Array.from(blog.children);
+    blogData.image = '';
     blogData.sections = [];
     let sectionObject = {title: '', content: []};
     let text = ''
@@ -173,11 +178,13 @@ function saveBlogData() {
                 text += content.value;
             }
             if (content.classList.contains('image')) {
+                if (blogData.image == '') blogData.image = content.src;
                 sectionObject.content.push({image: content.src});
             }
         }
     }
-    blogData.readEstimate = Math.round(text.length/1000+1);
+    blogData.readEstimate = Math.round(text.length/1000);
+    if (blogData.readEstimate < 1) blogData.readEstimate = 1;
     blogData.sections.push(sectionObject);
     // document.querySelector('.console').textContent =  JSON.stringify(blogData)
 }

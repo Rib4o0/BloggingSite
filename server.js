@@ -81,11 +81,6 @@ app.get('/get-recent-blogs', (req, res) => {
   res.json(blogsPackage);
 })
 
-// app.get('/get-blogging-ids', (req, res) => {
-//   let id = {id: generateUniqueSessionId()};
-//   res.json(id);
-// })
-
 app.post('/post-blog', (req, res) => {
   const blogData = req.body;
   blogData.id = generateUniqueSessionId();
@@ -243,6 +238,11 @@ app.get('/get-user' , (req, res) => {
   let data = {firstName:''}
   if (req.session != null) data = {firstName: req.session.firstName, lastName: req.session.lastName, email: req.session.email};
   res.send(JSON.stringify(data));
+})
+
+app.get('/logout', (req, res) => {
+  res.clearCookie('sessionid');
+  res.redirect('/login');
 })
 // ------------------------
 

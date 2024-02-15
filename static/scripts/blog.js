@@ -130,16 +130,12 @@ function createBlog() {
     const date = document.querySelector('.date');
     const main = document.querySelector('.main');
     const briefing = document.querySelector('.briefing');
+    const readEstimate = document.querySelector('.readEstimate');
     title.textContent = blogData.title;
     subtitle.textContent = blogData.subtitle;
     creator.textContent = blogData.creator;
     date.textContent = blogData.publishDate;
-    if (blogData.image != '') {
-        const image = document.createElement('img');
-        image.classList.add('img');
-        image.src = blogData.image;
-        briefing.appendChild(image);
-    }
+    if (blogData.readEstimate) readEstimate.textContent = blogData.readEstimate + 'min read';
     for (section of blogData.sections) {
         const sectionTitle = document.createElement('div');
         sectionTitle.classList.add('sectionTitle');
@@ -182,5 +178,10 @@ function createBlog() {
     }
 }
 
+const shareBtn = document.querySelector('.share');
+const copyMessage = document.querySelector('.copyMessage');
+shareBtn.addEventListener('click', (e) => {
+    copyMessage.classList.add('show');
+})
 
 //blogData = {creator: 'Rosen Kamenov', publishDate: '21 Nov 2021',title: 'example title', subtitle: 'example subtitle', image: 'example image', sections: [{paragraphs: [{text: 'example paragraph 1'}, {text: 'example paragraph 2'}, {text: 'example paragraph 3'}, {text: 'example paragraph 4'}]}, {paragraphs: [{text: 'example paragraph 5'}, {text: 'example paragraph 6}]}};

@@ -19,9 +19,11 @@ const profileSettings = document.querySelector('.profileSettings');
 fetch('/get-user')
 .then(res => res.json())
 .then(data => {
-    if (data.firstName != '') {
+    if (data.email != '') {
         const userName = document.querySelector('.userName');
         userName.textContent = data.firstName + ' ' + data.lastName;
+        const email = document.querySelector('.email');
+        email.textContent = data.email.slice(0,1) + '****@' + data.email.slice(data.email.indexOf('@') + 1);
         login.remove();
         user.addEventListener('click', () => {
             profileSettings.classList.add('show');
