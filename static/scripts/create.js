@@ -21,6 +21,8 @@ subtitle.addEventListener('input', () => {
     saveBlogData();
 });
 
+var keypressed = false;
+
 calibrateTextAreas();
 function calibrateTextAreas() {
     const textareas = document.querySelectorAll('.textarea');
@@ -32,8 +34,8 @@ function calibrateTextAreas() {
         textarea.addEventListener('keydown', function (e) {
             if (e.key === 'Enter' || e.keyCode === 13) {
                 e.preventDefault(); // Prevent newline
-                if (this.dataset.keyPressed == 'false') {
-                    this.dataset.keyPressed = 'true';
+                if (!keypressed) {
+                    keypressed = true;
                     if (textarea.classList.contains('image')) {
                         const image = document.createElement('img');
                         image.src = textarea.value;
@@ -41,6 +43,19 @@ function calibrateTextAreas() {
                         if (textarea.value != '')blog.insertBefore(image, this.nextSibling);
                         this.remove();
                         calibrateTextAreas()
+                    } else if (textarea.classList.contains('listItem')) {
+                        const listItem = document.createElement('li');
+                        listItem.classList.add('li');
+                        const litextarea = document.createElement('textarea');
+                        litextarea.classList.add('listItem');
+                        litextarea.classList.add('textarea');
+                        litextarea.setAttribute('rows',1);
+                        litextarea.setAttribute('oninput', 'autoExpand(this)');
+                        listItem.appendChild(litextarea);
+                        textarea.parentElement.parentElement.insertBefore(listItem, this.nextSibling);
+                        calibrateTextAreas()
+                        litextarea.focus();
+
                     } else if (!textarea.classList.contains('title') && !textarea.classList.contains('subtitle')) {
                         const paragraph = document.createElement('textarea');
                         paragraph.classList.add('paragraph');
@@ -54,8 +69,18 @@ function calibrateTextAreas() {
                 } 
             }
             if (e.key === 'Backspace' || e.keyCode === 8) {
-                if (textarea.value == '') {
-                    if (textarea != title && textarea != subtitle) textarea.remove();
+                if (textarea.value == '' ) {
+                    if (textarea != title && textarea != subtitle) {
+                        if (textarea.parentElement.classList.contains('li')) {
+                            if (textarea.parentElement.previousElementSibling) textarea.parentElement.previousElementSibling.focus();
+                            let list = textarea.parentElement.parentElement;
+                            textarea.parentElement.remove();
+                            if (list.childElementCount < 1) list.remove();
+                        } else {
+                            if (textarea.previousElementSibling) textarea.previousElementSibling.focus();
+                            textarea.remove();
+                        }
+                    }
                 }
             }
             autoExpand(this);
@@ -63,7 +88,7 @@ function calibrateTextAreas() {
         });
 
         textarea.addEventListener('keyup', function (e) {
-            this.dataset.keyPressed = 'false';
+            keypressed = false;
         })
     })
 }
@@ -131,8 +156,25 @@ addQuote.addEventListener('click', () => {
     quote.focus();
     saveBlogData();
 });
-const addList = document.querySelectorAll('.addList');
-
+const addList = document.querySelector('.addList');
+addList.addEventListener('click', () => {
+    const list = document.createElement('ul');
+    list.classList.add('list');
+    const listItem = document.createElement('li');
+    listItem.classList.add('li')
+    const textarea = document.createElement('textarea');
+    textarea.classList.add('textarea');
+    listItem.appendChild(textarea);
+    list.appendChild(listItem);
+    blog.insertBefore(list, addBtn)
+    textarea.classList.add('listItem');
+    textarea.setAttribute('rows', 1);
+    textarea.setAttribute('oninput', 'autoExpand(this)');
+    calibrateTextAreas()
+    textarea.focus();
+    addBtn.classList.remove('open');
+    saveBlogData();
+})
 const addSection = document.querySelector('.addSection');
 addSection.addEventListener('click', () => {
     const section = document.createElement('div');
@@ -181,6 +223,14 @@ function saveBlogData() {
                 if (blogData.image == '') blogData.image = content.src;
                 sectionObject.content.push({image: content.src});
             }
+            if (content.classList.contains('list')) {
+                let listChildren = Array.from(content.children);
+                let listObject = {list: []};
+                for (let listItem of listChildren) {
+                    listObject.list.push({text: listItem.firstElementChild.dataset.value});
+                }
+                sectionObject.content.push(listObject);
+            }
         }
     }
     blogData.readEstimate = Math.round(text.length/1000);
@@ -224,30 +274,6 @@ fetch('/get-user')
         profileSettings.remove();
     }
 })
-
-var selectedTextElement = document.getElementById('selectedText');
-
-  // Add a selectionchange event listener to the document
-  document.addEventListener('selectionchange', function() {
-    // Use the Selection API to get the selection
-    var selection = window.getSelection();
-
-    // Check if there's a selection and it's not collapsed
-    if (selection && !selection.isCollapsed) {
-      // Get the selected text using toString()
-      var selectedText = selection.toString();
-
-      // Display the selected text in the specified element
-      selectedTextElement.textContent = 'Selected text: ' + selectedText;
-
-      // Perform additional actions based on the selected text
-      // Add your custom logic here
-      console.log('Selected text:', selectedText);
-    } else {
-      // No selection, clear the displayed information
-      selectedTextElement.textContent = 'Selected text will be displayed here.';
-    }
-  });
 
 window.addEventListener('click', e => {
     if (e.target != user && e.target.parentNode != user && e.target != profileSettings) {
