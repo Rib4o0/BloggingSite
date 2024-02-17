@@ -19,7 +19,7 @@ const profileSettings = document.querySelector('.profileSettings');
 fetch('/get-user')
 .then(res => res.json())
 .then(data => {
-    if (data.email != '') {
+    if (data.email != '' && data.email != null && data.email != undefined) {
         const userName = document.querySelector('.userName');
         userName.textContent = data.firstName + ' ' + data.lastName;
         const email = document.querySelector('.email');
@@ -60,7 +60,7 @@ fetch('/get-recent-blogs')
         if (blog.subtitle) blogBrief.textContent = blog.subtitle + ' - ';
         for (const section of blog.sections) {
             for (const content of section.content) {
-                if (content.text) blogBrief.textContent += content.text
+                if (content.text) blogBrief.textContent += content.text + ' '
             }
         }
         const blogCreator = document.createElement('div');

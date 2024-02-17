@@ -2,11 +2,12 @@ const title = document.querySelector('.textarea.title');
 const titleLabel = document.querySelector('.titleLabel');
 const subtitle = document.querySelector('.textarea.subtitle');
 const subtitleLabel = document.querySelector('.subtitleLabel');
+const paragraphSettings = document.querySelector('.paragraphSettings');
 title.addEventListener('input', () => {
     title.value = title.value.replace(/\n/g, '');
     autoExpand(title);
-    titleLabel.style.height = (title.offsetHeight-window.innerHeight*0.025) + 'px';
-    subtitleLabel.style.top = (title.offsetHeight+window.innerHeight*0.009) + 'px';
+    titleLabel.style.height = (title.offsetHeight-windowHeight*0.025) + 'px';
+    subtitleLabel.style.top = (title.offsetHeight+windowHeight*0.009) + 'px';
     blogData.title = title.value;
     const htmlTitle = document.querySelector('title');
     htmlTitle.textContent = blogData.title;
@@ -16,21 +17,22 @@ title.addEventListener('input', () => {
 subtitle.addEventListener('input', () => {
     subtitle.value = subtitle.value.replace(/\n/g, '');
     autoExpand(subtitle);
-    subtitleLabel.style.height = (subtitle.offsetHeight-window.innerHeight*0.025) + 'px';
+    subtitleLabel.style.height = (subtitle.offsetHeight-windowHeight*0.025) + 'px';
     blogData.subtitle = subtitle.value;
     saveBlogData();
 });
 
 var keypressed = false;
+const windowHeight = window.innerHeight;
 
 calibrateTextAreas();
 function calibrateTextAreas() {
     const textareas = document.querySelectorAll('.textarea');
     textareas.forEach(textarea => {
         autoExpand(textarea)
-        titleLabel.style.height = (title.offsetHeight-window.innerHeight*0.025) + 'px';
-        subtitleLabel.style.top = (title.offsetHeight+window.innerHeight*0.009) + 'px';
-        subtitleLabel.style.height = (subtitle.offsetHeight-window.innerHeight*0.025) + 'px';
+        titleLabel.style.height = (title.offsetHeight-windowHeight*0.025) + 'px';
+        subtitleLabel.style.top = (title.offsetHeight+windowHeight*0.009) + 'px';
+        subtitleLabel.style.height = (subtitle.offsetHeight-windowHeight*0.025) + 'px';
         textarea.addEventListener('keydown', function (e) {
             if (e.key === 'Enter' || e.keyCode === 13) {
                 e.preventDefault(); // Prevent newline
@@ -90,6 +92,18 @@ function calibrateTextAreas() {
         textarea.addEventListener('keyup', function (e) {
             keypressed = false;
         })
+
+        textarea.addEventListener('focus', function () {
+            if (textarea.classList.contains('title') || textarea.classList.contains('subtitle')) return;
+            let top = textarea.getBoundingClientRect().top;
+            paragraphSettings.style.top = (top + textarea.clientHeight / 2 - 0.11 * windowHeight  + window.scrollY-3) + 'px';
+            paragraphSettings.style.opacity = 1;
+        })
+
+        textarea.addEventListener('blur', function () {
+           paragraphSettings.style.top = '0px';
+           paragraphSettings.style.opacity = 0;
+        })
     })
 }
 
@@ -115,7 +129,6 @@ addBtn.addEventListener('click', () => {
 const blog = document.querySelector('.blog');
 const addParagraph = document.querySelector('.addParagraph');
 addParagraph.addEventListener('click', () => {
-    console.log('addedParagraph');
     const paragraph = document.createElement('textarea');
     paragraph.classList.add('paragraph');
     paragraph.classList.add('textarea');
@@ -249,30 +262,22 @@ links.forEach(link => {
 
 const scrollbar = document.querySelector('.scrollbar');
 const progress = document.querySelector('.progress');
-if (document.documentElement.scrollHeight == window.innerHeight) scrollbar.style.display = 'none';
+if (document.documentElement.scrollHeight == windowHeight) scrollbar.style.display = 'none';
 window.addEventListener('scroll', () => {
-    progress.style.height = Math.floor(window.scrollY*100/(document.documentElement.scrollHeight - window.innerHeight)) + '%'
+    progress.style.height = Math.floor(window.scrollY*100/(document.documentElement.scrollHeight - windowHeight)) + '%'
 });
 
 const user = document.querySelector('.user');
-const login = document.querySelector('.login');
 const profileSettings = document.querySelector('.profileSettings');
 fetch('/get-user')
 .then(res => res.json())
 .then(data => {
-    if (data.firstName != '') {
-        const userName = document.querySelector('.userName');
-        userName.textContent = data.firstName + ' ' + data.lastName;
-        blogData.creator = data.firstName + ' ' + data.lastName;
-        login.remove();
-        user.addEventListener('click', () => {
-            profileSettings.classList.add('show');
-        })
-    }
-    else {
-        user.remove();
-        profileSettings.remove();
-    }
+    const userName = document.querySelector('.userName');
+    userName.textContent = data.firstName + ' ' + data.lastName;
+    blogData.creator = data.firstName + ' ' + data.lastName;
+    user.addEventListener('click', () => {
+        profileSettings.classList.add('show');
+    })
 })
 
 window.addEventListener('click', e => {

@@ -23,7 +23,6 @@
         <div class="btns">
             <!-- <button class="createBlog" data-link="create">Create a blog</button> -->
             <button class="postBlog">Post</button>
-            <button class="login" data-link="login">Log in</button>
             <div class="user">
                 <div class="userName">Rosen Kamenov</div>
                 <button class="profile"><i class="fa-regular fa-user"></i></button>
@@ -43,6 +42,7 @@
         <label for=".title" class="titleLabel">Title</label>
         <textarea class="textarea subtitle" oninput="autoExpand(this)" rows="1" placeholder="Subtitle(optional)"></textarea>
         <label for=".subtitle" class="subtitleLabel">Subtitle</label>
+        <textarea class="textarea paragraph" oninput="autoExpand(this)" rows="1"></textarea>
         <div class="add"><i class="fa-solid fa-xmark"></i></div>
         <div class="addOptions">
             <i class="addParagraph fa-solid fa-text"></i>
@@ -50,6 +50,15 @@
             <i class="addQuote fa-solid fa-quotes"></i>
             <i class="addList fa-solid fa-list"></i>
             <i class="addSection fa-solid fa-distribute-spacing-vertical"></i>
+        </div>
+        <div class="paragraphSettings">
+            <i class="fa-regular fa-gear"></i>
+            <div class="paragraphSettingsMenu">
+                <strong class="bold">B</strong>
+                <em class="italic">i</em>
+                <u class="underline">U</u>
+                <strike class="strike">S</strike>
+            </div>
         </div>
     </main>
 </body>
