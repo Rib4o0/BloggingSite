@@ -8,7 +8,7 @@ links.forEach(link => {
 
 const scrollbar = document.querySelector('.scrollbar');
 const progress = document.querySelector('.progress');
-if (document.documentElement.scrollHeight == window.innerHeight) scrollbar.style.display = 'none';
+if (document.documentElement.scrollHeight === window.innerHeight) scrollbar.style.display = 'none';
 window.addEventListener('scroll', () => {
     progress.style.height = Math.floor(window.scrollY*100/(document.documentElement.scrollHeight - window.innerHeight)) + '%'
 })
@@ -22,7 +22,7 @@ const login = document.querySelector('.login');
 fetch('/get-user')
 .then(res => res.json())
 .then(data => {
-    if (data.firstName != '') {
+    if (data.email != '') {
         const userName = document.querySelector('.userName');
         userName.textContent = data.firstName + ' ' + data.lastName;
         login.remove();
@@ -33,7 +33,7 @@ fetch('/get-user')
     else user.remove();
 })
 
-var blogData;
+let blogData;
 // blogData = {creator: 'Rosen Kamenov', publishDate: '21 Nov 2021',title: 'example title', subtitle: 'example subtitle', image: 'https://images.pexels.com/photos/1905054/pexels-photo-1905054.jpeg?cs=srgb&dl=pexels-loc-dang-1905054.jpg&fm=jpg', sections: [{title: 'Section title 1', content: [{text: 'example paragraph 1'}, {text: 'example paragraph 2'}, {text: 'example paragraph 3'}, {text: 'example paragraph 4'}]}, {title: 'Section title 2', content: [{text: 'example paragraph 5'}, {text: 'example paragraph 6'}, {image: 'https://media.cntraveler.com/photos/5eb18e42fc043ed5d9779733/master/pass/BlackForest-Germany-GettyImages-147180370.jpg'}, {'quote': 'I feel like my work is not meeting your expectations. Can you tell me what you’d like me to change so that we’re on the same wavelength?'}]}]};
 // var blogData = {
 //     id: 1,
@@ -135,16 +135,17 @@ function createBlog() {
     creator.textContent = blogData.creator;
     date.textContent = blogData.publishDate;
     if (blogData.readEstimate) readEstimate.textContent = blogData.readEstimate + 'min read';
-    for (section of blogData.sections) {
+    for (let section of blogData.sections) {
         const sectionTitle = document.createElement('div');
         sectionTitle.classList.add('sectionTitle');
         sectionTitle.textContent = section.title;
         main.appendChild(sectionTitle);
-        for (content of section.content) {
+        for (let content of section.content) {
             if (content.text) {
                 const paragraph = document.createElement('p');
                 paragraph.textContent = content.text;
                 if (content.style) paragraph.classList.add(content.style);
+                if (content.size) paragraph.classList.add(content.size);
                 main.appendChild(paragraph);
             }
             if (content.image) {
@@ -156,23 +157,26 @@ function createBlog() {
                 const quote = document.createElement('p');
                 quote.textContent = content.quote;
                 quote.classList.add('quote');
+                if (content.style) quote.classList.add(content.style);
+                if (content.size) quote.classList.add(content.size);
                 main.appendChild(quote);
             }
             if (content.list) {
                 let list;
                 list = document.createElement('ul');
-                for (item of content.list) {
+                for (let item of content.list) {
                     const listItem = document.createElement('li');
                     listItem.textContent = item.text;
                     if (item.style) listItem.classList.add(item.style);
+                    if (item.size) listItem.classList.add(item.size);
                     list.appendChild(listItem);
                 }
                 main.appendChild(list);
             }
         }
-        const partSeperator = document.createElement('div');
-        partSeperator.classList.add('partSeperator');
-        if (blogData.sections[blogData.sections.length - 1] !== section)main.appendChild(partSeperator);
+        const partSeparator = document.createElement('div');
+        partSeparator.classList.add('partSeparator');
+        if (blogData.sections[blogData.sections.length - 1] !== section)main.appendChild(partSeparator);
     }
 }
 

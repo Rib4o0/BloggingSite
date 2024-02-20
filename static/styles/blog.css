@@ -166,6 +166,10 @@ header {
 }
 
 @media screen and (max-width: 140vh) {
+    .blogs {
+        grid-template-columns: repeat(1, 1fr);
+        grid-template-rows: repeat(6, 30vh);
+    }
     .user, .createBlog, .headerTitle, .login{
         transform: scale(80%);
     }
@@ -177,11 +181,14 @@ header {
     .user {
         transform: scale(70%);
         position: relative;
-        right: 6vw;
+        /* left: 2vh; */
+        right: -2vh;
     }
     .createBlog {
+        margin: 0;
         position: relative;
-        left: 4vw;
+        /* left: 7vh; */
+        left: 7vh;
     }
     .userName {
         font-size: 2vh;
@@ -193,6 +200,11 @@ header {
     }
     .btns:has(.login)  > .createBlog {
         left: 7vw;
+    }
+
+    .btns {
+        width: 50%;
+        justify-content: end;
     }
 }
 
@@ -304,7 +316,7 @@ img {
     width: 100%;
 }
 
-.partSeperator {
+.partSeparator {
     position: relative;
     left: 50%;
     transform: translateX(-50%);
@@ -334,6 +346,19 @@ main > * {
 
 .bold {
     font-weight: bold;
+}
+
+.italic {
+    font-style: italic;
+}
+
+.bolditalic {
+    font-weight: bold;
+    font-style: italic;
+}
+
+.large {
+    font-size: 3.5vh;
 }
 
 li {

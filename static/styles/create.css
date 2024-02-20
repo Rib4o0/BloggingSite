@@ -335,7 +335,7 @@ img {
     margin-bottom: 1.5vh;
 }
 
-.partSeperator {
+.partSeparator {
     position: relative;
     left: 50%;
     transform: translateX(-50%);
@@ -447,7 +447,8 @@ li, .listItem {
     left: -4vh;
     top: 14.3vh;
     transition: transform 300ms ease-in-out;
-    opacity: 1;
+    opacity: 0;
+    background: transparent;
 }
 
 .paragraphSettings > i {
@@ -462,8 +463,99 @@ li, .listItem {
 
 .paragraphSettingsMenu {
     position: absolute;
-    top: 0;
     left: 0;
+    height: 5vh;
     width: auto;
     display: flex;
+    align-items: center;
+    background: #1f1f1f;
+    padding-inline: 1vh;
+    border-radius: 0.5vh;
 }
+
+.paragraphSettingsMenu > * {
+    margin-right: 1vh;
+    color: white;
+    font-size: 3vh;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.paragraphSettingsMenu > div {
+    margin-left: 0.5vh;
+}
+
+.paragraphSettingsMenu > div > i {
+    font-size: 2.6vh;
+
+}
+.divider {
+    height: 70%;
+    width: 0.2vh;
+    background-color: #888888;
+    margin-inline: .5vh;
+    border-radius: 1vh;
+}
+
+.paragraphSettingsMenu > div:last-child {
+    margin: 0;
+    position: relative;
+    top: -0.3vh;
+}
+
+.paragraphSettingsMenu > *.active {
+    color: #b0fcb0;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+.italic {
+    font-style: italic;
+}
+
+.large {
+    font-size: 3.5vh;
+}
+
+.addParOptions {
+    position: absolute;
+    width: min-content;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    z-index: 10;
+    transition: all 250ms;
+    left: .2vh;
+    top: 50vh;
+    background-color: white;
+}
+
+.addParOptions > i {
+    width: 4vh;
+    height: 4vh;
+    border-radius: 50%;
+    border: 0.1vh solid red;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 1vh;
+    padding: .5vh;
+    color: red;
+    pointer-events: all;
+}
+
+.disabled {
+    opacity: 0;
+    pointer-events: none;
+    cursor: default;
+    z-index: -100;
+}
+
+.disabled > * {
+    opacity: 0;
+    pointer-events: none;
+    cursor: default;
+}
+
