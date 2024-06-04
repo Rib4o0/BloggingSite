@@ -13,7 +13,7 @@ title.addEventListener('input', () => {
     blogData.title = title.value;
     const htmlTitle = document.querySelector('title');
     htmlTitle.textContent = blogData.title;
-    if (blogData.title == '') blogData.title = 'Untitled';
+    if (blogData.title === '') blogData.title = 'Untitled';
     saveBlogData();
 });
 subtitle.addEventListener('input', () => {
@@ -27,6 +27,7 @@ subtitle.addEventListener('input', () => {
 var keypressed = false;
 const windowHeight = window.innerHeight;
 var lastFocused;
+var posted = false;
 
 calibrateTextAreas();
 function calibrateTextAreas() {
@@ -92,7 +93,7 @@ function calibrateTextAreas() {
             saveBlogData();
         });
 
-        textarea.addEventListener('keyup', function (e) {
+        textarea.addEventListener('keyup', function () {
             keypressed = false;
         })
 
@@ -349,6 +350,13 @@ postBlog.addEventListener('click', () => {
         },
         body: JSON.stringify(blogData)
     })
+        .then(() => {
+            /**
+             * TODO: Add a notification if the blog wasn't successfully uploaded
+             **/
+        });
+    posted = true;
+    window.location.href = '/';
 });
 
 const blogData = {readEstimate: 0, creator: '', publishDate: '', title: '', subtitle: '', image: '', sections: []};
@@ -445,7 +453,7 @@ window.addEventListener('click', e => {
 
 window.addEventListener("beforeunload", function(event) {
     // Cancel the event
-    event.preventDefault();
+    if (!posted) event.preventDefault();
     
     // Display a warning message
     return "Are you sure you want to leave? Your changes will not be saved.";
