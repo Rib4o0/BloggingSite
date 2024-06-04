@@ -4,6 +4,7 @@ const path = require('path');
 const fs = require('fs');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
+const encrypt = require('fer32');
 const port = 3000;
 
 app.use(bodyParser.json());
@@ -51,11 +52,11 @@ app.get('*', (req, res, next) => {
 // Blog managing --------------------------------
 
 app.get('/', (req,res) => {
-  res.sendFile(path.join(__dirname,'static','homePage.html'));
+  res.sendFile(path.join(__dirname,'static','/home/homePage.html'));
 })
 
 app.get('/blog/:id', (req,res) => {
-  res.sendFile(path.join(__dirname,'static','blog.html'));
+  res.sendFile(path.join(__dirname,'static','/blog/blog.html'));
 })
 
 app.get('/get-blog-data/:id', (req,res) => {
@@ -68,7 +69,7 @@ app.get('/get-blog-data/:id', (req,res) => {
 
 app.get('/create', (req, res) => {
   if (req.session == null) res.redirect('/login');
-  else res.sendFile(path.join(__dirname,'static','create.html'));
+  else res.sendFile(path.join(__dirname,'static','/create/create.html'));
 })
 
 app.get('/get-recent-blogs', (req, res) => {
@@ -83,23 +84,48 @@ app.get('/get-recent-blogs', (req, res) => {
 
 app.post('/post-blog', (req, res) => {
   const blogData = req.body;
-  blogData.id = generateUniqueSessionId();
+  blogData.id = generateUniqueBlogId();
+  for (let user of users) {
+    if (user.email === blogData.ownerEmail) {
+      user.ownedBlogs.push(blogData.id);
+    }
+  }
   blogs.push(blogData);
   saveData();
+})
+
+// Profiles pages
+
+app.get('/profile/:id', (req, res) => {
+  res.sendFile(path.join(__dirname, 'static', '/profile/profile.html'));
+})
+
+app.get('/get-profile/:id', (req, res) => {
+  let data = "404 NOT FOUND";
+  for (let user of users) {
+    console.log(user);
+    if (user.id == req.params.id) {
+      data = {id: user.id, firstName: user.firstName, lastName: user.lastName, ownedBlogs: user.ownedBlogs, likedBlogs: user.likedBlogs, favouriteBlogs: user.favouriteBlogs }
+    }
+  } 
+  console.log(req.params.id, data);
+  res.json(JSON.stringify(data));
 })
 
 // Login and signup ------------------------------
 
 app.get('/login', (req, res) => {
-  res.sendFile(path.join(__dirname,'static','login.html'));
+  if (req.session) res.redirect("/");
+  else res.sendFile(path.join(__dirname,'static','/login/login.html'));
 })
 
 app.post('/login', (req, res) => {
   let email = req.body.email;
   let password = req.body.password;
+  let hashPass = encrypt(password)
   let correctData = false;
   for (let user of users) {
-    if (user.email == email && user.password == password) {
+    if (user.email == email && user.password == hashPass) {
       correctData = true;
       let sessionExists = false;
       let prevSession;
@@ -111,13 +137,13 @@ app.post('/login', (req, res) => {
       }
       let session;
       if (!sessionExists) {
-        session = {firstName: user.firstName, lastName: user.lastName, email: user.email, id: generateUniqueSessionId(), ip: req.ip};
+        session = {firstName: user.firstName, lastName: user.lastName, email: user.email, userid: user.id, sessionid: generateUniqueSessionId(), ip: req.ip};
         sessions.push(session);
       }
       else {
         session = prevSession;
       }
-      res.cookie('sessionid', session.id);
+      res.cookie('sessionid', session.sessionid);
       saveData();
       res.redirect('/');
     }
@@ -128,8 +154,8 @@ app.post('/login', (req, res) => {
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <title>Login</title>
-      <link rel="stylesheet" href="/styles/login.css">
-      <script src="/scripts/login.js" defer></script>
+      <link rel="stylesheet" href="/login/login.css">
+      <script src="/login/login.js" defer></script>
   </head>
   <body>
       <div class="scrollbar">
@@ -168,7 +194,8 @@ app.post('/login', (req, res) => {
 })
 
 app.get('/register', (req, res) => {
-  res.sendFile(path.join(__dirname,'static','register.html'));
+  if (req.session) res.redirect("/");
+  else res.sendFile(path.join(__dirname,'static','/register/register.html'));
 })
 
 app.post('/register', (req, res) => {
@@ -176,13 +203,14 @@ app.post('/register', (req, res) => {
   let lastName = req.body.lastName;
   let email = req.body.email;
   let password = req.body.password;
+  let hashPass = encrypt(password)
   let emailExists = false;
   for (let user of users) {
     if (user.email == email) emailExists = true;
   }
   let user
   if (!emailExists) {
-    user = {firstName: firstName, lastName: lastName, email: email, password: password};
+    user = {id: generateUniqueUserId (),firstName: firstName, lastName: lastName, email: email, password: hashPass, ownedBlogs: [], likedBlogs: [], favouriteBlogs: [], comments: []};
     users.push(user);
     saveData();
     res.redirect('/login');
@@ -193,8 +221,8 @@ app.post('/register', (req, res) => {
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <title>Register</title>
-      <link rel="stylesheet" href="/styles/register.css">
-      <script src="/scripts/register.js" defer></script>
+      <link rel="stylesheet" href="/register/register.css">
+      <script src="/register/register.js" defer></script>
   </head>
   <body>
       <div class="scrollbar">
@@ -260,6 +288,14 @@ function generateUniqueBlogId() {
   return id;
 }
 
+function generateUniqueUserId() {
+  let id = Math.round(Math.random() * 1000000000000000);
+  for (let user of users) {
+    if (user.id == id) return generateUniqueUserId();
+  }
+  return id;
+}
+
 function generateUniqueSessionId() {
   let id = Math.round(Math.random() * 1000000000000000);
   for(let session of sessions) {
@@ -281,3 +317,5 @@ function saveData() {
     if (err) throw err;
   })
 }
+
+//3aa41d45a81cf97ec6bf9880162401892c580c2260b36074b506bd7f4678cbb3

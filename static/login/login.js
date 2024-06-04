@@ -2,7 +2,7 @@ const links = document.querySelectorAll('[data-link]');
 links.forEach(link => {
     link.style.cursor = 'pointer';
     link.addEventListener('click', () => {
-        window.location = `./${link.dataset.link}`;
+        window.location = `/${link.dataset.link}`;
     })
 })
 

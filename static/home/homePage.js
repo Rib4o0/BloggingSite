@@ -25,6 +25,8 @@ fetch('/get-user')
         userName.textContent = data.firstName + ' ' + data.lastName;
         const email = document.querySelector('.email');
         email.textContent = data.email.toString().slice(0,1) + '****@' + data.email.slice(data.email.indexOf('@') + 1);
+        // const profileLink = document.querySelector('.profileLink');
+        // profileLink.dataset.link = "profile/" + data.userid;
         login.remove();
         user.addEventListener('click', () => {
             profileSettings.classList.add('show');

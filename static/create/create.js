@@ -243,7 +243,6 @@ function autoExpand(textarea) {
 }
 
 const addBtn = document.querySelector('.add');
-const addOptions = document.querySelectorAll('.addOptions');
 addBtn.addEventListener('click', () => {
     if (!addBtn.classList.contains('open')) {
         addBtn.classList.add('open');
@@ -440,6 +439,7 @@ fetch('/get-user')
     const userName = document.querySelector('.userName');
     userName.textContent = data.firstName + ' ' + data.lastName;
     blogData.creator = data.firstName + ' ' + data.lastName;
+    blogData.ownerEmail = data.email;
     user.addEventListener('click', () => {
         profileSettings.classList.add('show');
     })

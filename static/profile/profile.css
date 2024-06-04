@@ -1,0 +1,310 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+* {
+    font-family: poppins, serif;
+    font-size: 2vh;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+    top: 8vh;
+}
+
+::-webkit-scrollbar {
+    display: none;
+}
+
+.scrollbar {
+    width: 5px;
+    position: fixed;
+    right: 0;
+    top: 0;
+    height: 100vh;
+    background-color: #ddd;   
+}
+
+.progress {
+    width: 100%;
+    height: 0;
+    background-color: red;
+    border-radius: 5px;
+    transition: all 250ms;
+}
+
+header {
+    position: fixed;
+    left: 0;
+    top:0;
+    padding-inline: 1.5vh;
+    width: calc(100% - 3vh);
+    height: 8vh;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: red;
+    z-index: 10;
+}
+
+.btns {
+    display: grid;
+    grid-template-columns: repeat(2, max-content);
+    place-items: center;
+    width: min-content;
+    gap: 1vw;
+}
+
+.user {
+    display: flex;
+    align-items: center;
+    width: auto;
+}
+
+.profile {
+    width: 5vh;
+    height: 5vh;
+    border-radius: 50%;
+    color: white;
+    background-color: red;
+    border: 2px solid white;
+    padding: 0;
+    margin: 0 0 0 2vh;
+}
+
+.profile:hover {
+    box-shadow: 0 0 1.5vh white;
+    cursor:pointer;
+}
+
+.profile > i {
+    font-size: 2vh;
+    padding: 0;
+    margin: 0;
+}
+
+.userName {
+    font-size: 1.5vh;
+    font-weight: 900;
+    color: white;
+    margin-left: 1vh;
+    width: min-content;
+}
+
+.headerTitle {
+    font-size: 4.5vh;
+    font-weight: 900;
+    color:white;
+    width: 35vh;
+}
+
+.createBlog {
+    width: 10vw;
+    height: 5vh;
+    background-color: red;
+    border: 2px solid white;
+    border-radius: 0.5vh;
+    color: white;
+    font-weight: 700;
+    transition: all 250ms;
+    max-width: 40vw;
+    min-width: 20vh;
+}
+
+.login {
+    width: 7vw;
+    height: 5vh;
+    background-color: white;
+    border: 2px solid white;
+    border-radius: .5vh;
+    color:red;
+    font-weight: 700;
+    transition: all 250ms;
+    max-width: 23vw;
+    margin: 0;
+    min-width: 13vh;
+}
+
+.createBlog:hover, .login:hover {
+    box-shadow: 0 0 1.5vh white;
+    cursor:pointer;
+}
+
+.profileSettings {
+    position: fixed;
+    top: 9vh;
+    right: 1vh;
+    width: 30vw;
+    max-width: 30vh;
+    background-color: red;
+    border-radius: 1vh;
+    padding: 1vh;
+    box-shadow: 0 0 3vh gray;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 250ms;
+}
+
+.profileSettings > div {
+    color: white;
+    font-weight: 600;
+    width: 100%;
+    height: 5vh;
+    display: flex;
+    align-items: center;
+}
+
+.profileSettings > div:hover:not(.profileSettingsContent:last-child) {
+    text-shadow: 0 0 1.5vh white;
+    cursor:pointer;
+}
+
+.profileSettings.show {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.navOptions {
+    width: 40vw;
+    color: white;
+    height: 8vh;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    font-weight: 500;
+    transition: all 250ms;
+}
+
+.navOptions > *:hover {
+    text-shadow: 0 0 0.5vh white;
+    cursor:pointer;
+}
+
+main {
+    position: relative;
+    top: 10vh;
+    width: 90%;
+    /* height: 90%; */
+    /* background-color: rebeccapurple; */
+    left: 50%;
+    transform: translate(-50%);
+}
+
+.sectionTitle {
+    font-size: 3.5vh;
+    font-weight: 900;
+    color: red;
+    width: 100%;
+    text-align: center;
+}
+
+.blogs {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    top: 3vh;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(3, 25vh);
+    grid-gap: 2vh;
+}
+
+.blog {
+    /* background-color: royalblue; */
+    padding: 1vh;
+    border-radius: 1vh;
+    border: 2px solid red;
+    display: flex;
+    justify-content: space-between;
+    overflow: hidden;
+}
+
+.blogTitle {
+    font-size: 3vh;
+    font-weight: 600;
+}
+
+.blog > img {
+    width: 30%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 1vh;
+}
+
+.blogInfo {
+    width: 100%;
+    position: relative;
+}
+
+.blog:has(.blogImg) > .blogInfo {
+    margin-left: 1vh;
+    width: 68%;
+}
+
+@media screen and (max-width: 140vh) {
+    .blogs {
+        grid-template-columns: repeat(1, 1fr);
+        grid-template-rows: repeat(6, 30vh);
+    }
+    .user, .createBlog, .headerTitle, .login{
+        transform: scale(80%);
+    }
+    .navOptions {
+        display: none;
+    }
+    .headerTitle {
+        width: auto;
+    }
+    .createBlog {
+        margin: 0;
+        position: relative;
+        left: 3vh;
+    }
+    .userName {
+        font-size: 2vh;
+    }
+    .headerTitle {
+        transform: scale(70%);
+        position: relative;
+        right: 1vh;
+    }
+    .btns {
+        width: 20%;
+        justify-content: end;
+    }
+}
+
+.creator {
+    position: absolute;
+    left: 0;
+    bottom: -4.5vh;
+    font-size: 1.5vh;
+    color: red;
+    padding-top: 7vh;
+    padding-bottom: 5vh;
+    width: 100%;
+    background: linear-gradient(0deg,rgba(255, 255, 255, 0.9) 0%, rgba(255,255,255,0.9) 60%, rgba(255, 255, 255, 0) 100%);
+}
+
+.readEstimate {
+    position: absolute;
+    right:0;
+    bottom:-0.2vh;
+    font-size: 1.5vh;
+    background-color: red;
+    color: white;
+    padding: 1vh 1.5vh;
+    border-radius: 3vh;
+}
+
+.blogBrief {
+    font-size: 2vh;
+}
+
+.smth {
+    position: absolute;
+    top: 30vh;
+}
