@@ -4,13 +4,22 @@ const path = require('path');
 const fs = require('fs');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
-const encrypt = require('fer32');
+const bcrypt = require("bcrypt");
+const session = require('express-session');
+const salt = bcrypt.genSaltSync(10);
 const port = 3000;
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static('static'));
+
+app.use(session({
+  secret: "3aa41d45a81cf97ec6bf9880162401892c580c2260b36074b506bd7f4678cbb3",
+  resave: false,
+  saveUninitialized: true,
+  cookie: {secure: false }
+}))
 
 var blogs = [];
 var users = [];
@@ -24,28 +33,8 @@ fs.readFile(path.join(__dirname, 'Data', 'users.json'), 'utf8', (err, data) => {
   if (err) throw err;
   if (data != '') users = JSON.parse(data);
 });
-fs.readFile(path.join(__dirname, 'Data','sessions.json'), 'utf8', (err, data) => {
-  if (err) throw err;
-  if (data!= '') sessions = JSON.parse(data);
-});
 
 app.get('*', (req, res, next) => {
-  if (req.cookies.sessionid) {
-    let sessionFound = false;
-    for (let session of sessions) {
-      if (req.cookies.sessionid == session.id && req.ip == session.ip) {
-        req.session = session; 
-        sessionFound = true;
-      }
-    }
-    if (!sessionFound) {
-      res.clearCookie('sessionid');
-      req.session = null;
-    }
-  } 
-  else {
-    req.session = null;
-  }
   next()
 });
 
@@ -115,40 +104,18 @@ app.get('/get-profile/:id', (req, res) => {
 // Login and signup ------------------------------
 
 app.get('/login', (req, res) => {
-  if (req.session) res.redirect("/");
+  if (req.session.user) res.redirect("/");
   else res.sendFile(path.join(__dirname,'static','/login/login.html'));
 })
 
-app.post('/login', (req, res) => {
-  let email = req.body.email;
-  let password = req.body.password;
-  let hashPass = encrypt(password)
-  let correctData = false;
-  for (let user of users) {
-    if (user.email == email && user.password == hashPass) {
-      correctData = true;
-      let sessionExists = false;
-      let prevSession;
-      for (let session of sessions) {
-        if (session.email == email && session.ip == req.ip) {
-          sessionExists = true;
-          prevSession = session;
-        }
-      }
-      let session;
-      if (!sessionExists) {
-        session = {firstName: user.firstName, lastName: user.lastName, email: user.email, userid: user.id, sessionid: generateUniqueSessionId(), ip: req.ip};
-        sessions.push(session);
-      }
-      else {
-        session = prevSession;
-      }
-      res.cookie('sessionid', session.sessionid);
-      saveData();
-      res.redirect('/');
-    }
-  }
-  if (!correctData) res.send(`<!DOCTYPE html>
+app.post('/login', async (req, res) => {
+  const { email, password } = req.body;
+  const user = users.find(u => u.email === email);
+
+  if (user && await bcrypt.compare(password, user.password)) {
+    req.session.user = { id: user.id, firstName: user.firstName, lastName: user.lastName, email: user.email };
+    res.redirect('/');
+  } else res.send(`<!DOCTYPE html>
   <html lang="en">
   <head>
       <meta charset="UTF-8">
@@ -194,16 +161,17 @@ app.post('/login', (req, res) => {
 })
 
 app.get('/register', (req, res) => {
-  if (req.session) res.redirect("/");
+  if (req.session.user) res.redirect("/");
   else res.sendFile(path.join(__dirname,'static','/register/register.html'));
 })
 
-app.post('/register', (req, res) => {
+app.post('/register', async (req, res) => {
   let firstName = req.body.firstName;
   let lastName = req.body.lastName;
   let email = req.body.email;
   let password = req.body.password;
-  let hashPass = encrypt(password)
+  let hashPass = await bcrypt.hash(password, salt);
+  console.log(password, hashPass);
   let emailExists = false;
   for (let user of users) {
     if (user.email == email) emailExists = true;
@@ -264,14 +232,17 @@ app.post('/register', (req, res) => {
 
 app.get('/get-user' , (req, res) => {
   let data = {firstName:''}
-  if (req.session != null) data = {firstName: req.session.firstName, lastName: req.session.lastName, email: req.session.email};
+  if (req.session.user != null) data = {firstName: req.session.user.firstName, lastName: req.session.user.lastName, email: req.session.user.email};
   res.send(JSON.stringify(data));
 })
 
 app.get('/logout', (req, res) => {
-  res.clearCookie('sessionid');
-  res.redirect('/login');
-})
+  req.session.destroy(err => {
+    if (err) return res.status(500).send('Error logging out');
+    res.clearCookie('connect.sid');
+    res.redirect('/login');
+  });
+});
 // ------------------------
 
 app.listen(port,"0.0.0.0", () => {
@@ -311,9 +282,6 @@ function saveData() {
     if (err) throw err;
   })
   fs.writeFile(path.join(__dirname, 'Data','sessions.json'), JSON.stringify(sessions), (err) => {
-    if (err) throw err;
-  })
-  fs.writeFile(path.join(__dirname, 'Data', 'blogs.json'), JSON.stringify(blogs), (err) => {
     if (err) throw err;
   })
 }
